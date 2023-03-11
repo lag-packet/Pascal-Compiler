@@ -2,6 +2,10 @@ import java.io.*;
 import java.util.Scanner;
 import java.io.Reader;
 
+/* Lexical analayzer for pascal
+    @ Satar Hassni
+ */
+
 public class LexicalAnalyzer {
     private Reader reader;
     private char currentChar;
