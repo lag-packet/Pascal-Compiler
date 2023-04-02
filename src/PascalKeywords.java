@@ -53,4 +53,13 @@ enum PascalKeywords {
         }
         return false;
     }
+
+    public static boolean isType(String keyword) {
+        return keyword.equals("INTEGER") || keyword.equals("REAL") || keyword.equals("CHAR") || keyword.equals("BOOLEAN");
+    }
+
+    public static boolean isRelationalOperator(String keyword) {
+        return keyword.equals("=") || keyword.equals("<>") || keyword.equals("<") || keyword.equals(">") || keyword.equals("<=") || keyword.equals(">=");
+    }
+
 }
