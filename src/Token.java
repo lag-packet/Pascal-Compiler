@@ -45,6 +45,7 @@ class Token {
     public static final Token AND = new Token(TokenType.BOOLEAN_OPERATOR, "AND");
     public static final Token OR = new Token(TokenType.BOOLEAN_OPERATOR, "OR");
     public static final Token NOT = new Token(TokenType.BOOLEAN_OPERATOR, "NOT");
+    public static final Token EOF = new Token(TokenType.EOF, "EOF");
 
     private TokenType type;
     private String value;

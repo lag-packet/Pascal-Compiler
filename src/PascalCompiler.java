@@ -8,7 +8,7 @@ public class PascalCompiler {
     public static void main(String[] args) {
         try {
             // Read the input file
-            File inputFile = new File("validprogram.pas");
+            File inputFile = new File("input.pas");
             Scanner scanner = new Scanner(inputFile).useDelimiter("\\Z");
             String inputText = scanner.next();
 
@@ -57,6 +57,33 @@ public class PascalCompiler {
                         System.err.println("Invalid boolean expression syntax");
                     } else {
                         System.out.println("Valid boolean expression");
+                    }
+                } else if (token.getType() == TokenType.LPAREN) {
+                    boolean isValidMatchingParentheses = syntaxAnalyzer.checkMatchingParentheses();
+
+                    // Handle result of check
+                    if (!isValidMatchingParentheses) {
+                        System.err.println("Invalid parentheses match");
+                    } else {
+                        System.out.println("Valid parentheses match");
+                    }
+                } else if (token.getType() == TokenType.QUOTE || token.getType() == TokenType.LEFTDOUBLEQUOTE || token.getType() == TokenType.RIGHTDOUBLEQUOTE) {
+                    boolean isValidMatchingQuotes = syntaxAnalyzer.checkMatchingQuotes();
+
+                    // Handle result of check
+                    if (!isValidMatchingQuotes) {
+                        System.err.println("Invalid quotes match");
+                    } else {
+                        System.out.println("Valid quotes match");
+                    }
+                } else if (token.getType() == TokenType.BEGIN) {
+                    boolean isValidMatchingBeginEnd = syntaxAnalyzer.checkMatchingBeginEnd();
+
+                    // Handle result of check
+                    if (!isValidMatchingBeginEnd) {
+                        System.err.println("Invalid BEGIN/END match");
+                    } else {
+                        System.out.println("Valid BEGIN/END match");
                     }
                 }
 

@@ -20,6 +20,10 @@ public class LexicalAnalyzer {
             readNextChar();
         }
 
+        if (currentChar == '\0') {
+            return Token.EOF;
+        }
+
         if (currentChar == '{') {
             skipComment();
             return getNextToken();
@@ -85,7 +89,8 @@ public class LexicalAnalyzer {
                     readNextChar();
                     return Token.ASSIGN;
                 } else {
-                    throw new IllegalArgumentException("Illegal character: " + currentChar);
+                    System.err.println("Illegal character: " + currentChar);
+                    return new Token(TokenType.UNKNOWN, String.valueOf(currentChar));
                 }
         }
     }
@@ -123,14 +128,43 @@ public class LexicalAnalyzer {
         }
     }
 
-    private void skipComment() throws IOException {
-        while (currentChar != '}') {
+    public boolean skipComment() throws IOException {
+        if (currentChar == '{') {
+            while (currentChar != '}' && currentChar != (char) -1) {
+                readNextChar();
+            }
+            if (currentChar == '}') {
+                readNextChar(); // Skip the closing '}'
+                return true;
+            }
+        } else if (currentChar == '(') {
             readNextChar();
-            if (currentChar == '{') {
-                skipComment();
+            if (currentChar == '*') {
+                do {
+                    while (currentChar != '*' && currentChar != (char) -1) {
+                        readNextChar();
+                    }
+                    if (currentChar == '*') {
+                        readNextChar();
+                        if (currentChar == ')') {
+                            readNextChar(); // Skip the closing ')'
+                            return true;
+                        }
+                    }
+                } while (currentChar != (char) -1);
             }
         }
-        readNextChar();
+        return false;
+    }
+
+    public char peek() throws IOException {
+        reader.mark(1);
+        int nextChar = reader.read();
+        reader.reset();
+        return (char) nextChar;
+    }
+    public boolean isCommentStart(Token token) throws IOException {
+        return (token.getType() == TokenType.LPAREN && peek() == '*') || (token.getType() == TokenType.MODULO);
     }
 
     private void readNextChar() throws IOException {

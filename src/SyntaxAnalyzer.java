@@ -5,12 +5,13 @@ public class SyntaxAnalyzer {
     private LexicalAnalyzer lexer;
     private Token currentToken;
 
-    public Token getCurrentToken() {
-        return currentToken;
-    }
     public SyntaxAnalyzer(Reader reader) throws IOException {
         this.lexer = new LexicalAnalyzer(reader);
         this.currentToken = lexer.getNextToken();
+    }
+
+    public Token getCurrentToken() {
+        return currentToken;
     }
 
     // Helper method to consume the current token and get the next token
@@ -40,12 +41,21 @@ public class SyntaxAnalyzer {
                 consume();
                 if (PascalKeywords.isType(currentToken.getValue())) {
                     consume();
+                    if (currentToken.getType() == TokenType.ASSIGN) {
+                        consume();
+                        if (currentToken.getType() == TokenType.INTEGER_CONST || currentToken.getType() == TokenType.REAL_CONST) {
+                            consume();
+                        } else {
+                            return false;
+                        }
+                    }
                     return true;
                 }
             }
         }
         return false;
     }
+
 
     public boolean checkArithmeticOperation() throws IOException {
         // Assume the current token is an arithmetic operator
@@ -72,9 +82,60 @@ public class SyntaxAnalyzer {
                 return true;
             }
         }
-
         return false;
     }
 
+    public boolean checkMatchingParentheses() throws IOException {
+        int openParensCount = 0;
+        while (currentToken.getType() != TokenType.EOF) {
+            if (currentToken.getType() == TokenType.LPAREN) {
+                openParensCount++;
+            } else if (currentToken.getType() == TokenType.RPAREN) {
+                openParensCount--;
+                if (openParensCount < 0) {
+                    return false;
+                }
+            }
+            consume();
+        }
+        return openParensCount == 0;
+    }
 
+    public boolean checkMatchingQuotes() throws IOException {
+        int singleQuoteCount = 0;
+        int leftDoubleQuoteCount = 0;
+        int rightDoubleQuoteCount = 0;
+
+        while (currentToken.getType() != TokenType.EOF) {
+            if (currentToken.getType() == TokenType.QUOTE) {
+                singleQuoteCount++;
+            } else if (currentToken.getType() == TokenType.LEFTDOUBLEQUOTE) {
+                leftDoubleQuoteCount++;
+            } else if (currentToken.getType() == TokenType.RIGHTDOUBLEQUOTE) {
+                rightDoubleQuoteCount++;
+            }
+            consume();
+        }
+        return singleQuoteCount % 2 == 0 && leftDoubleQuoteCount == rightDoubleQuoteCount;
+    }
+
+    public boolean checkMatchingBeginEnd() throws IOException {
+        int beginCount = 0;
+        while (currentToken.getType() != TokenType.EOF) {
+            if (currentToken.getType() == TokenType.BEGIN) {
+                beginCount++;
+            } else if (currentToken.getType() == TokenType.END) {
+                beginCount--;
+                if (beginCount < 0) {
+                    return false;
+                }
+            }
+            consume();
+        }
+        return beginCount == 0;
+    }
+
+    public LexicalAnalyzer getLexer() {
+        return lexer;
+    }
 }
