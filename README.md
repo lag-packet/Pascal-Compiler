@@ -1,6 +1,6 @@
 # Pascal Compiler
 
-This repository contains a Java implementation of a compiler for the Pascal programming language. This is my CS course work (Principles of Programming Languages). The first part of the project was to implement the Lexical Analyzer, this part was done with a group member.
+This repository contains a Java implementation of a compiler for the Pascal programming language. This is my CS course work (Principles of Programming Languages). The first part of the project was to implement the Lexical Analyzer, this part was done with a group member in the class.
 
 ## Overview
 
