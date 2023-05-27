@@ -14,8 +14,6 @@ The Pascal Compiler project is a Java program that reads Pascal source code, tok
 
 ## Usage
 
-Due to the lack of a README in the repository and the limitations of my browsing tool, I wasn't able to determine the exact usage or build instructions for the project. However, given that it's a Java project, it would involve compiling the Java files and running the main class (`PascalCompiler`) with the Pascal source code file as input.
-
 Here is an example of how you might run a Java project from the command line:
 
 ```bash
